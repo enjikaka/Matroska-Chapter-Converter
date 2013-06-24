@@ -3,12 +3,18 @@
 <head>
 	<title>Matroska Chapter Converter</title>
 	<link href="style.css" rel="stylesheet">
-	<script src="script.js"></script>
 </head>
 <body>
-	<textarea id="input" onchange="save()"></textarea><br />
-	Seconds to show: <input type="text" id="time" value="5" /><br />
-	<button onclick="run()">Make SRT-file</button><button onclick="download()">Download SRT-file</button><br />
-	<textarea id="output"></textarea>
+	<div class="wrapper">
+		<h1>Matroska Chapter Converter</h1>
+		<textarea id="input" placeholder="Paste text here"></textarea><br>
+		<form>
+			<label for="time">Seconds to show (0-9):</label><input type="text" id="time" value="5" name="time" pattern="[0-9]"><br>
+			<button id="makeButton" type="submit">Make SRT-file</button>
+		</form>
+		<a id="downloadButton">Download SRT-file</a><br>
+		<textarea id="output" placeholder="Output will be here"></textarea>
+	</div>
+	<script src="script.js"></script>
 </body>
 </html>
