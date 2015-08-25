@@ -1,25 +1,41 @@
-function timeAdd(t,d) {
-	t = t.split(":");
-	var h = t[0],m = t[1],s = t[2];
-	if (h.substring(0, 1) == "0") { h = h.substring(1, 2); }
-	if (m.substring(0, 1) == "0") { m = m.substring(1, 2); }
-	if (s.substring(0, 1) == "0") { s = s.substring(1, 2); }
-	h = parseInt(h);
-	m = parseInt(m);
-	s = parseInt(s);
-	s += parseInt(d);
-	if (s >= 60) {
-		s -= 60;
-		m += 1;
+function timeAdd(timeString, additionalSeconds) {
+	var time = timeString.split(":");
+	var hours = time[0],
+		minutes = time[1],
+		seconds = time[2];
+
+	if (hours.substring(0, 1) == "0") { 
+		hours = hours.substring(1, 2); 
 	}
-	if (m >= 60) {
-		m -= 60;
-		h += 1;
+
+	if (minutes.substring(0, 1) == "0") { 
+		minutes = minutes.substring(1, 2); 
 	}
-	s = s >= 10 ? s : '0' + s;
-	m = m >= 10 ? m : '0' + m;
-	h = h >= 10 ? h : '0' + h;
-	return h + ':' + m + ':' + s;
+
+	if (seconds.substring(0, 1) == "0") { 
+		seconds = seconds.substring(1, 2); 
+	}
+
+	hours = parseInt(hours);
+	minutes = parseInt(minutes);
+	seconds = parseInt(seconds);
+	seconds += parseInt(additionalSeconds);
+
+	if (seconds >= 60) {
+		seconds -= 60;
+		minutes += 1;
+	}
+
+	if (minutes >= 60) {
+		minutes -= 60;
+		hours += 1;
+	}
+
+	seconds = seconds >= 10 ? seconds : '0' + seconds;
+	minutes = minutes >= 10 ? minutes : '0' + minutes;
+	hours = hours >= 10 ? hours : '0' + hours;
+
+	return hours + ':' + minutes + ':' + seconds;
 }
 
 function convert(input) {
@@ -35,10 +51,13 @@ function convert(input) {
 	// Loop to get each chapter and adds info to output
 	for (var i = 0; i < atom.length; i++) {
 		output += parseInt(i + 1) + "\n";
+
 		var startTime = atom[i].getElementsByTagName("ChapterTimeStart")[0].childNodes[0].nodeValue.split(".")[0];
+
 		output += startTime + ",000 --> " + timeAdd(startTime,timeToShow) + ",000\n" 
 		+ atom[i].getElementsByTagName("ChapterDisplay")[0].getElementsByTagName("ChapterString")[0].childNodes[0].nodeValue;
-		if (i != atom.length - 1) {
+
+		if (i !== atom.length - 1) {
 			output += "\n\n";
 		}
 	}
@@ -58,11 +77,12 @@ document.getElementById('makeButton').addEventListener('click', function() {
 
 	// Set the href to the data-url for the content
 	document.getElementById('downloadButton').setAttribute("href", baseURL(srt,"text/plain"));
+	
 	// Add downlaod attribute to element to be able to download onclick, suggested name included
 	document.getElementById('downloadButton').setAttribute("download", new Date().getTime() + "_chapter.srt");
 }, false);
 
 // Prevent the form from updating page url with flags
-document.getElementsByTagName('form')[0].addEventListener('submit',function(e) {
-	e.preventDefault();
+document.getElementsByTagName('form')[0].addEventListener('submit', function(event) {
+	event.preventDefault();
 },false);
